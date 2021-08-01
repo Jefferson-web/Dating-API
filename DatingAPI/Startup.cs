@@ -33,6 +33,15 @@ namespace DatingAPI
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddCors(builder =>
+            {
+                builder.AddPolicy("MyPolicy", policy => {
+                    policy
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithOrigins("http://localhost:4200");
+                });
+            });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -53,6 +62,8 @@ namespace DatingAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("MyPolicy");
 
             app.UseAuthorization();
 
